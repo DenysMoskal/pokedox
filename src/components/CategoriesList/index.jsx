@@ -1,24 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrent } from "../../store/slice/typesSlice";
-import { capitalizeFirstLetter } from "../../services/capitalizeFirstLetter";
 import { useState } from "react";
+import { Audio } from "react-loader-spinner";
 
-const Select = () => {
+import { setCurrent } from "../../store/slice/typesSlice";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
+import { selectAllTypesInfo } from "../../store/slice/typesSlice";
+
+const CategoriesList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const { types } = useSelector((state) => state.types);
-  const { currentType } = useSelector((state) => state.types);
+
+  const { types, currentType, isLoading, error } =
+    useSelector(selectAllTypesInfo);
 
   return (
     <>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-gray-100 absolute px-6 py-2 border-black border cursor-pointer top-10"
+        className="bg-gray-100 fixed px-6 py-2 border-black border cursor-pointer top-10"
       >
         Category:{capitalizeFirstLetter(currentType)}
       </div>
       {isOpen && (
-        <ul className=" absolute top-22 w-[142px] overflow-auto">
+        <ul className="fixed top-22 w-[142px] overflow-y-scroll h-[80%]   scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-blue-100 ">
           <li
             onClick={() => dispatch(setCurrent("All"))}
             className={
@@ -29,7 +33,7 @@ const Select = () => {
           >
             All
           </li>
-          {types.map((type) => (
+          {types?.map((type) => (
             <li
               key={type.name}
               onClick={() => dispatch(setCurrent(type.name))}
@@ -42,10 +46,21 @@ const Select = () => {
               {capitalizeFirstLetter(type.name)}
             </li>
           ))}
+          {error && <div>{error}</div>}
         </ul>
+      )}
+      {isLoading && (
+        <Audio
+          height="80"
+          width="80"
+          radius="9"
+          color="gray"
+          ariaLabel="loading"
+          wrapperStyle
+        />
       )}
     </>
   );
 };
 
-export default Select;
+export default CategoriesList;

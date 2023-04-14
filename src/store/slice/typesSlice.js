@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+
+import { getPokemonTypes } from "../../api";
 
 export const fetchPokemonTypes = createAsyncThunk(
   "pokemonTypes/fetch",
-  async () => {
-    const response = await axios.get("https://pokeapi.co/api/v2/type");
-    return response.data.results;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getPokemonTypes();
+      return response.data.results;
+    } catch (error) {
+      rejectWithValue(error.message);
+    }
   }
 );
 
@@ -13,7 +18,7 @@ const pokemonTypesSlice = createSlice({
   name: "pokemonTypes",
   initialState: {
     types: [],
-    loading: false,
+    isLoading: false,
     error: null,
     currentType: "All",
   },
@@ -28,18 +33,21 @@ const pokemonTypesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchPokemonTypes.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchPokemonTypes.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.types = action.payload;
       })
       .addCase(fetchPokemonTypes.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.isLoading = false;
+        state.error = action.action.payload;
       });
   },
 });
+
+export const selectCurrentPokemonType = ({ types }) => types.currentType;
+export const selectAllTypesInfo = ({types}) => types
 
 export const { setCurrent, showAll } = pokemonTypesSlice.actions;
 export default pokemonTypesSlice.reducer;

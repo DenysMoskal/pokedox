@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
+
 import { fetchPokemon } from "../../store/slice/onePokemonSlice";
-import { capitalizeFirstLetter } from "../../services/capitalizeFirstLetter";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 
 const PokemonCart = ({ sprites, name, types }) => {
   const dispatch = useDispatch();
