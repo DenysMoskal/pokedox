@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+import { getPokemons } from "../../api";
+
 export const fetchPokemons = createAsyncThunk(
   "pokemons/fetchPokemons",
-  async (_, { getState }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
       const { page } = getState().pokemons;
-      const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon/?limit=12&offset=${(page - 1) * 12}`
-      );
+      const response = await getPokemons(page);
       const pokemonList = response.data.results;
       const pokemonData = await Promise.all(
         pokemonList.map(async (pokemon) => {
@@ -18,7 +18,7 @@ export const fetchPokemons = createAsyncThunk(
       );
       return pokemonData;
     } catch (error) {
-      console.error(error);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -27,31 +27,29 @@ const pokemonsSlice = createSlice({
   name: "pokemons",
   initialState: {
     pokemons: [],
-    loading: false,
+    isLoading: false,
     error: null,
     page: 1,
   },
-  reducers: {
-    showMore: (state) => {
-      state.page = state.page + 1;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchPokemons.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchPokemons.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.page += 1;
         state.pokemons = [...state.pokemons, ...action.payload];
       })
       .addCase(fetchPokemons.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
+
+export const selectPokemonsInfo = ({ pokemons }) => pokemons;
 
 export const { showMore } = pokemonsSlice.actions;
 export default pokemonsSlice.reducer;

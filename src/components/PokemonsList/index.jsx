@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 import { fetchPokemons } from "../../store/slice/pokemonsSlice";
 import PokemonCart from "../PokemonCart";
 import Skeleton from "../Skeleton";
 import { fetchPokemonTypes } from "../../store/slice/typesSlice";
-import Select from "../Select/Select";
+import CategoriesList from "../CategoriesList";
+import { selectPokemonsInfo } from "../../store/slice/pokemonsSlice";
+import { selectCurrentPokemonType } from "../../store/slice/typesSlice";
 
 const PokemonList = () => {
-  const { pokemons, loading, error } = useSelector((state) => state.pokemons);
-  const { currentType } = useSelector((state) => state.types);
-
-  console.log(pokemons);
+  const { pokemons, isLoading, error } = useSelector(selectPokemonsInfo);
+  const currentType = useSelector(selectCurrentPokemonType);
 
   const dispatch = useDispatch();
 
@@ -21,9 +22,9 @@ const PokemonList = () => {
 
   return (
     <>
-      <Select />
+      <CategoriesList />
 
-      <div className="w-[80%] flex flex-wrap justify-center pl-[120px]">
+      <div className="w-[80%] flex flex-wrap justify-center pl-[150px]">
         {pokemons
           ?.filter((item) => {
             if (currentType === "All") {
@@ -39,22 +40,24 @@ const PokemonList = () => {
             }
           })
           .map((pokemon) => (
-            <PokemonCart {...pokemon} key={pokemon.id} />
+            <PokemonCart
+              sprites={pokemon.sprites}
+              name={pokemon.name}
+              types={pokemon.types}
+              key={pokemon.id}
+            />
           ))}
-        {loading && (
+        {isLoading && (
           <div className="flex flex-wrap">
             {[...Array(12)].map((_, idx) => (
-              <div key={idx}>
+              <div key={idx} className="">
                 <Skeleton />
               </div>
             ))}
           </div>
         )}
+        {error && <h1 className="text-red-400 my-20 ml-[140px]">{error}</h1>}
       </div>
-
-      {error && (
-        <h1 className="text-red-400 m-auto mt-20 ">You have a problem with</h1>
-      )}
     </>
   );
 };

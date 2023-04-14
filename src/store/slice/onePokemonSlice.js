@@ -1,19 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+
+import { getOnePokemon } from "../../api";
 
 export const fetchPokemon = createAsyncThunk(
   "pokemons/fetchPokemon",
-  async (id) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon/${id}`
-      );
-      console.log(response, "response");
+      const response = await getOnePokemon(id);
+
       const pokemon = response.data;
 
       return pokemon;
     } catch (error) {
-      console.error(error);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -22,28 +21,31 @@ const pokemonsSlice = createSlice({
   name: "pokemon",
   initialState: {
     currentPokemon: null,
-    loading: false,
+    isLoading: false,
+    error: null,
   },
   reducers: {
-    clear: (state) => {
+    clearCurrentPokemon: (state) => {
       state.currentPokemon = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPokemon.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchPokemon.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.currentPokemon = action.payload;
       })
       .addCase(fetchPokemon.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clear } = pokemonsSlice.actions;
+export const selectOnePokemonInfo = ({ pokemon }) => pokemon;
+
+export const { clearCurrentPokemon } = pokemonsSlice.actions;
 export default pokemonsSlice.reducer;
