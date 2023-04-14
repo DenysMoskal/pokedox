@@ -2,9 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Audio } from "react-loader-spinner";
 
-import { setCurrent } from "../../store/slice/typesSlice";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import { selectAllTypesInfo } from "../../store/slice/typesSlice";
+import { setCurrent, selectAllTypesInfo } from "../../store/slice/typesSlice";
 
 const CategoriesList = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,9 +15,9 @@ const CategoriesList = () => {
     <>
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-gray-100 fixed px-6 py-2 border-black border cursor-pointer top-10"
+        className="bg-gray-100 fixed px-6 py-2 border-black border cursor-pointer top-10 capitalize"
       >
-        Category:{capitalizeFirstLetter(currentType)}
+        Category:{currentType}
       </div>
       {isOpen && (
         <ul className="fixed top-22 w-[142px] overflow-y-scroll h-[80%]   scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-blue-100 ">
@@ -39,11 +37,11 @@ const CategoriesList = () => {
               onClick={() => dispatch(setCurrent(type.name))}
               className={
                 currentType === type.name
-                  ? "mr-2 bg-red-200 px-2 py-2 cursor-pointer "
-                  : "mr-2 bg-slate-200 px-2 py-2 cursor-pointer hover:bg-slate-300"
+                  ? "mr-2 bg-red-200 px-2 py-2 cursor-pointer capitalize "
+                  : "mr-2 bg-slate-200 px-2 py-2 cursor-pointer hover:bg-slate-300 capitalize"
               }
             >
-              {capitalizeFirstLetter(type.name)}
+              {type.name}
             </li>
           ))}
           {error && <div>{error}</div>}

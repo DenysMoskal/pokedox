@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Audio } from "react-loader-spinner";
 
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { padZero } from "../../utils/padZeros";
 import close from "../../images/close.svg";
-import { clearCurrentPokemon } from "../../store/slice/onePokemonSlice";
-import { selectOnePokemonInfo } from "../../store/slice/onePokemonSlice";
-import Table from "../Table";
+import {
+  clearCurrentPokemon,
+  selectOnePokemonInfo,
+} from "../../store/slice/onePokemonSlice";
+import { PokemonCharacterTable } from "../PokemonCharacterTable";
 
 const PokemonInfo = () => {
   const { currentPokemon, isLoading, error } =
@@ -33,12 +34,12 @@ const PokemonInfo = () => {
               </button>
             </div>
 
-            <div className="text-center text-3xl my-2">
-              {capitalizeFirstLetter(currentPokemon.name)}{" "}
+            <div className="text-center text-3xl my-2 capitalize">
+              {currentPokemon.name}{" "}
               <span className="bold"> #{padZero(currentPokemon.id)}</span>
             </div>
 
-            <Table currentPokemon={currentPokemon} />
+            <PokemonCharacterTable currentPokemon={currentPokemon} />
           </div>
         )}
 

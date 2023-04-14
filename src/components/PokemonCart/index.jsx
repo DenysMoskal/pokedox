@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 
 import { fetchPokemon } from "../../store/slice/onePokemonSlice";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 
 const PokemonCart = ({ sprites, name, types }) => {
   const dispatch = useDispatch();
@@ -22,7 +21,7 @@ const PokemonCart = ({ sprites, name, types }) => {
         src={sprites.front_default}
         alt={name}
       />
-      <h2 className="text-center text-lg">{capitalizeFirstLetter(name)}</h2>
+      <h2 className="text-center text-lg capitalize">{name}</h2>
       <ul className="flex items-center justify-evenly my-2">
         {typeNames.map((type) => (
           <li key={type}>
