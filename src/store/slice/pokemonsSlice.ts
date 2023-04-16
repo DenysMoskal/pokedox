@@ -19,16 +19,23 @@ export const fetchPokemons = createAsyncThunk<
   try {
     const { page } = getState().pokemons;
     const response = await getPokemons(page);
+
     const pokemonList = response.data.results;
+
     const pokemonData = await Promise.all(
       pokemonList.map(async (pokemon: { url: string }) => {
         const res = await axios.get(pokemon.url);
         return res.data;
       })
     );
+
     return pokemonData;
-  } catch (error: any) {
-    return rejectWithValue(error.message);
+  } catch (error) {
+    if (error instanceof Error) {
+      return rejectWithValue(error.message);
+    } else {
+      return rejectWithValue("Unknown error occurred.");
+    }
   }
 });
 const initialState: pokemonsSliceType = {

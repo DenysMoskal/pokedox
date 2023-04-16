@@ -20,8 +20,8 @@ export const fetchPokemon = createAsyncThunk<
     const pokemon = response.data;
 
     return pokemon;
-  } catch (error: any) {
-    return rejectWithValue(error.message);
+  } catch (error) {
+    if (error instanceof Error) return rejectWithValue(error.message);
   }
 });
 

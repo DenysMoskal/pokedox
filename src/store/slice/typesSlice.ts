@@ -18,8 +18,8 @@ export const fetchPokemonTypes = createAsyncThunk<
   try {
     const response = await getPokemonTypes();
     return response.data.results;
-  } catch (error: any) {
-    rejectWithValue(error.message);
+  } catch (error) {
+    if (error instanceof Error) return rejectWithValue(error.message);
   }
 });
 
