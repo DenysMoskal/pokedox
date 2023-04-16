@@ -1,9 +1,17 @@
-import { useDispatch } from "react-redux";
+import { FC } from "react";
 
+import { useAppDispatch } from "../../hook/index";
+import { spritesType, typesType } from "../../modules/modulesPokemon";
 import { fetchPokemon } from "../../store/slice/onePokemonSlice";
 
-const PokemonCart = ({ sprites, name, types }) => {
-  const dispatch = useDispatch();
+interface PokemonCartProps {
+  sprites: spritesType;
+  name: string;
+  types: typesType[];
+}
+
+const PokemonCart: FC<PokemonCartProps> = ({ sprites, name, types }) => {
+  const dispatch = useAppDispatch();
 
   const typeNames = types.map((type) => type.type.name);
 
