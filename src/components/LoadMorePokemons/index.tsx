@@ -1,11 +1,11 @@
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "hook";
 
 import { fetchPokemons } from "../../store/slice/pokemonsSlice";
 
 const LoadMorePokemons = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const moreHandler = (e) => {
+  const moreHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     dispatch(fetchPokemons());
   };

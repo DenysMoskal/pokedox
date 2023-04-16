@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Audio } from "react-loader-spinner";
+import { FC } from "react";
 
+import { categoryTypes } from "../../modules/modulesType";
 import { setCurrent, selectAllTypesInfo } from "../../store/slice/typesSlice";
 
-const CategoriesList = () => {
+const CategoriesList: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -31,7 +33,7 @@ const CategoriesList = () => {
           >
             All
           </li>
-          {types?.map((type) => (
+          {types?.map((type: categoryTypes) => (
             <li
               key={type.name}
               onClick={() => dispatch(setCurrent(type.name))}
@@ -48,14 +50,7 @@ const CategoriesList = () => {
         </ul>
       )}
       {isLoading && (
-        <Audio
-          height="80"
-          width="80"
-          radius="9"
-          color="gray"
-          ariaLabel="loading"
-          wrapperStyle
-        />
+        <Audio height="80" width="80" color="gray" ariaLabel="loading" />
       )}
     </>
   );

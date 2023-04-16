@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Audio } from "react-loader-spinner";
 
-import { padZero } from "../../utils/padZeros";
 import close from "../../images/close.svg";
+import { padZero } from "../../utils/padZeros";
+
 import {
   clearCurrentPokemon,
   selectOnePokemonInfo,
@@ -47,14 +48,7 @@ const PokemonInfo = () => {
       </aside>
       {isLoading && (
         <div className="fixed right-24 top-[40%] m-auto">
-          <Audio
-            height="80"
-            width="80"
-            radius="9"
-            color="gray"
-            ariaLabel="loading"
-            wrapperStyle
-          />
+          <Audio height="80" width="80" color="gray" ariaLabel="loading" />
         </div>
       )}
     </>

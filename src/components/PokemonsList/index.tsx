@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 
 import PokemonCart from "../PokemonCart";
 import Skeleton from "../Skeleton";
 import CategoriesList from "../CategoriesList";
+import { useAppDispatch, useAppSelector } from "../../hook";
 
 import {
   fetchPokemons,
@@ -15,10 +15,10 @@ import {
 } from "../../store/slice/typesSlice";
 
 const PokemonList = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { pokemons, isLoading, error } = useSelector(selectPokemonsInfo);
-  const currentType = useSelector(selectCurrentPokemonType);
+  const { pokemons, isLoading, error } = useAppSelector(selectPokemonsInfo);
+  const currentType = useAppSelector(selectCurrentPokemonType);
 
   useEffect(() => {
     dispatch(fetchPokemons());
@@ -54,7 +54,7 @@ const PokemonList = () => {
         {isLoading && (
           <div className="flex flex-wrap">
             {[...Array(12)].map((_, idx) => (
-              <div key={idx} className="">
+              <div key={idx}>
                 <Skeleton />
               </div>
             ))}

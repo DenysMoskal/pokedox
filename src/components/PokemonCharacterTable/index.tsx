@@ -1,4 +1,13 @@
-export const PokemonCharacterTable = ({ currentPokemon }) => {
+import { FC } from "react";
+
+import { currentPokemonType } from "modules/modulesPokemon";
+interface currentPokemonPropsType {
+  currentPokemon: currentPokemonType;
+}
+
+export const PokemonCharacterTable: FC<currentPokemonPropsType> = ({
+  currentPokemon,
+}) => {
   const statsBlock = () => {
     const stats = Object.values(currentPokemon.stats);
 
